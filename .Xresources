@@ -15,13 +15,9 @@ XTerm*reverseVideo:      on
 XTerm*selectToClipboard: true
 
 *background:                      #222D31
-!*background:                      [90]#000000
-!*foreground:                      #d8d8d8
-!*foreground:                      green
-*foreground:                      white 
-*fading:                          10
+*foreground:                      #d8d8d8
+*fading:                          8
 *fadeColor:                       black
-!*cursorColor:                     #1ABB9B
 *cursorColor:                     green
 *pointerColorBackground:          #2B2C2B
 *pointerColorForeground:          #16A085
@@ -31,20 +27,19 @@ XTerm*selectToClipboard: true
 *color8:                          #585858
 
 !! red dark/light
-*color1:                          #fa3232
+*color1:                          #ab4642
 *color9:                          #ab4642
 
 !! green dark/light
-*color2:                          #4bc95e
-!*color2:                          #7E807E
-*color10:                         #0dfc31
+*color2:                          #7E807E
+*color10:                         #8D8F8D
 
 !! yellow dark/light
 *color3:                          #f7ca88
 *color11:                         #f7ca88
 
 !! blue dark/light
-*color4:                          #4b5ec9
+*color4:                          #7cafc2
 *color12:                         #7cafc2
 
 !! magenta dark/light
@@ -62,40 +57,42 @@ XTerm*selectToClipboard: true
 Xcursor.theme: xcursor-breeze
 Xcursor.size:                     0
 
-!urxvt.font: 					  xft:NotoSansCJKKR:size=12
-urxvt.font: 					  xft:D2Coding:size=15, xft:HackNerdFontMono:size=18
-!urxvt.font: 					  xft:D2Coding:size=15, xft:FiraCodeNerdFont:size=16
-URxvt*boldFont:                   xft:D2Coding:size=16
+!URxvt.font:                       9x15,xft:TerminessTTFNerdFontMono
+URxvt.font:                       xft:D2Coding:size=14, xft:HackNerdFontMono:size=15
 
-!URxvt*perl-lib:                   ~/.urxvtv/ext/keyboard-select
-urxvt.perl-ext-common: resize-font, keyboard-select
+!URxvt*boldFont:                   xft:D2Coding:size=16
 
-URxvt.perl-ext: default,url-select
-URxvt.keysym.M-u: perl:url-select:select_next
+! referenced https://smarttech101.com/urxvt-installation-color-scheme-fonts-resize-etc/#urxvt-extensions
+!URxvt.perl-ext-common: url-select,keyboard-select,resize-font,matcher,selection-to-clipboard,readline,tabbed,...
+URxvt.perl-ext-common: default,url-select,keyboard-select,resize-font
+
 URxvt.url-select.launcher: /usr/bin/xdg-open
+URxvt.keysym.M-u: perl:url-select:select_next
 URxvt.url-select.underline: true
 
-! keyboard-select
-! URxvt.keysym.M-Escape: perl:keyboard-select:activate
-! URxvt.keysym.M-s: perl:keyboard-select:search
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
+URxvt.keysym.M-s: perl:keyboard-select:search
 
-! resize font size
-!URxvt.keysym.C-j:     resize-font:smaller
-!URxvt.keysym.C-k:      resize-font:bigger
+URxvt.keysym.C-minus:  resize-font:smaller
+URxvt.keysym.C-plus:   resize-font:bigger
+URxvt.keysym.C-equal:  resize-font:equal
+
 ! alternative font settings with 'terminus':
 ! URxvt.font:      -xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso10646-1
 ! URxvt.bold.font: -xos4-terminus-bold-r-normal--16-160-72-72-c-80-iso10646-1
 !! terminus names see end of file!
 
 URxvt.depth:                      32
-URxvt.background:                 [90]#000000
+!URxvt.background:                 [100]#222D31
+URxvt.background:                 [95]#000000
 URxvt*scrollBar:                  false
 URxvt*mouseWheelScrollPage:       false
 URxvt*cursorBlink:                true
 URxvt*background:                 black
-URxvt*foreground:                 lightblue 
+URxvt*foreground:                 grey
+!URxvt*foreground:                 white 
 URxvt*saveLines:                  5000
-URxvt*fading:                     50
+URxvt*fading:                     25
 URxvt*colorUL:                    yellow
 
 ! for 'fake' transparency (without Compton) uncomment the following three lines
@@ -109,15 +106,13 @@ URxvt.keysym.Shift-Control-V:     eval:paste_clipboard
 URxvt.keysym.Shift-Control-C:     eval:selection_to_clipboard
 !Xterm escape codes, word by word movement
 URxvt.keysym.Control-Left:        \033[1;5D
-! URxvt.keysym.Control-h:        \033[1;5D
-! URxvt.keysym.Shift-Control-Left:  \033[1;6D
+URxvt.keysym.Shift-Control-Left:  \033[1;6D
 URxvt.keysym.Control-Right:       \033[1;5C
-! URxvt.keysym.Control-l:       \033[1;5C
-! URxvt.keysym.Shift-Control-Right: \033[1;6C
-! URxvt.keysym.Control-Up:          \033[1;5A
-! URxvt.keysym.Shift-Control-Up:    \033[1;6A
-! URxvt.keysym.Control-Down:        \033[1;5B
-! URxvt.keysym.Shift-Control-Down:  \033[1;6B
+URxvt.keysym.Shift-Control-Right: \033[1;6C
+URxvt.keysym.Control-Up:          \033[1;5A
+URxvt.keysym.Shift-Control-Up:    \033[1;6A
+URxvt.keysym.Control-Down:        \033[1;5B
+URxvt.keysym.Shift-Control-Down:  \033[1;6B
 ! Rxvt.perl-ext-common:             ...,clipboard
 ! URxvt.keysym.M-C-c:               perl:clipboard:copy
 ! URxvt.keysym.M-v:                 perl:clipboard:paste
@@ -187,11 +182,13 @@ URxvt*geometry:                   80x-1
 ! URxvt*italicFont:                 fontname
 ! URxvt*boldItalicFont:             fontname
 ! URxvt*intensityStyles:            boolean
-URxvt*inputMethod:                ibus
-URxvt*preeditType:                OnTheSpot
-URxvt*utf8:             		      true
-URxvt*locale:             		    true
-URxvt*imLocale:                   en_US.UTF-8
+!URxvt*inputMethod:                ibus
+!URxvt*preeditType:                OverTheSpot
+! myself
+! by https://okky.kr/questions/1403847
+!URxvt*utf8:                       true
+!URxvt*locale:                     true
+! URxvt*imLocale:                   string
 ! URxvt*imFont:                     fontname
 ! URxvt*title:                      string
 ! URxvt*iconName:                   string
@@ -206,7 +203,7 @@ URxvt*imLocale:                   en_US.UTF-8
 ! URxvt*borderLess:                 true
 ! URxvt*lineSpace:                  number
 ! URxvt*letterSpace:                number
-URxvt*skipBuiltinGlyphs:          true
+!URxvt*skipBuiltinGlyphs:          true
 ! URxvt*pointerBlankDelay:          number
 ! URxvt*backspacekey:               string
 ! URxvt*deletekey:                  string
@@ -216,6 +213,7 @@ URxvt*skipBuiltinGlyphs:          true
 ! URxvt*answerbackString:           string
 ! URxvt*secondaryScreen:            boolean
 ! URxvt*secondaryScroll:            boolean
+! URxvt*perl-lib:                   string
 ! URxvt*perl-eval:                  perl-eval
 ! URxvt*perl-ext-common:            string
 ! URxvt*perl-ext:                   string

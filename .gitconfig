@@ -5,31 +5,30 @@
 [core]
 	editor = nvim
 
-
-#[color "diff"]
-#    meta = yellow bold
-#    frag = magenta bold
-#	old = red 
-#    new = blue
-#	slot = red
-#	plain = red
-
 [color "diff"]
 	commit = blue reverse
 	frag = magenta bold italic 
   meta = black red 
   old = red
-	new = green
-#    new = cyan
-#	context = white # context (ie: unchanged lines) text
+	new = cyan 
 
 [color "branch"]
 	current = green
+
 [color "status"]
-  header = blue
-	updated = green
+  branch = black brightblue 
+  header = white
+  added = cyan
+  changed = red bold
+	untracked = magenta
 
 [init]
 	defaultBranch = main
+
 [help]
 	autocorrect = prompt
+
+[web]
+	browser = google-chrome
+[safe]
+	directory = /opt/flutter

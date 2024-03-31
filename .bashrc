@@ -2,6 +2,9 @@
 # ~/.bashrc
 #
 
+# vi mode for bash
+set -o vi
+
 [[ $- != *i* ]] && return
 
 colors() {
@@ -70,84 +73,191 @@ if ${use_color} ; then
 	fi
 
 	if [[ ${EUID} == 0 ]] ; then
-		#PS1='\[\033[01;31m\][\h\[\033[01;36m\] \W\[\033[01;31m\]]\$\[\033[00m\] '
-		PS1='\W\$ '
+		PS1='\[\033[01;31m\][\h\[\033[01;36m\] \W\[\033[01;31m\]]\$\[\033[00m\] '
 	else
-		#PS1='\[\033[01;32m\][\u@\h\[\033[01;37m\] \W\[\033[01;32m\]]\$\[\033[00m\] '
-		PS1='\W\$ '
+		PS1='\[\033[01;32m\][\u@\h\[\033[01;37m\] \W\[\033[01;32m\]]\$\[\033[00m\] '
 	fi
 
 	alias ls='ls --color=auto'
-	alias grep='grep --colour=auto'
+	#alias grep='grep --colour=auto'
 	alias egrep='egrep --colour=auto'
 	alias fgrep='fgrep --colour=auto'
 else
 	if [[ ${EUID} == 0 ]] ; then
 		# show root@ when we don't have colors
-		#PS1='\u@\h \W \$ '
-		PS1='\W\$ '
+		PS1='\u@\h \W \$ '
 	else
-		#PS1='\u@\h \w \$ '
-		PS1='\w\$ '
+		PS1='\u@\h \w \$ '
 	fi
 fi
 
 unset use_color safe_term match_lhs sh
 
-alias m1="mons -o"
-alias m2="mons -e left"
-
 alias cp="cp -i"                          # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
-alias np='nano -w PKGBUILD'
-alias more=less
-alias rm='rm -i'
+alias rm='trash'
+#alias np='nano -w PKGBUILD'
+#alias more=less
+alias cat='bat'
+alias grep='rg'
 
 alias x='xdg-open'
+alias C='xclip'
+alias V='xclip -o'
+alias vi='nvim'
+alias pacup='sudo pacman -Syyu'
+alias yayup='yay -Syyu'
 
-alias C="xclip"
-alias V="xclip -o"
-alias vi="nvim"
-alias pacup="sudo pacman -Syu"
-alias yayup="yay -Syu"
-#alias aurup="sudo pamac upgrade --aur"   //  왜인지 몰라도 안된다.
+alias ga='git add'
+alias gco='git commit'
+alias gch='git checkout'
+alias gp='git push'
 
-alias gitAP="git add . && git commit -m 'auto commit' && git push origin HEAD"
+alias gb='git branch'
+alias gs='git status'
+alias gd='git diff'
+alias gst='git stash'
+alias gl='git log'
+alias glO='git log --oneline'
+alias glG='git log --oneline --graph'
 
-alias gb="git branch"
-alias gs="git status"
-alias gd="git diff"
-alias gl="git log"
-alias glH="git log origin/main...HEAD"
-alias glG="git log --oneline --graph"
+alias ..='cd ..'
+alias ...='cd ../..'
 
-alias gch="git checkout"
-alias gco="git commit"
+alias d='docker'
+alias di='docker images'
 
-alias ..="cd .."
-alias ...="cd ../.."
+alias dc='docker-compose'
 
-alias ,="ibus-daemon -drx"
+alias CP='pwd | C'
+alias PP='cd `V`'
 
-alias 3="cd ~/job/crawlers/kickstarter3"
-alias 2="cd ~/job/autoStock"
+# pacman -S lsd
+# https://github.com/lsd-rs/lsd
 
-alias 1="cd /home/sy/study/habit_tracker"
+alias ls='lsd --group-directories-first'
+alias ll='ls -lXF --group-directories-first'
+alias lla='ls -lAXtF --group-directories-first'
 
+alias c='clear'
+alias suvi='sudoedit'
+alias e='exit'
 
-alias lint="npx eslint ."
-alias lint:fix="npx eslint --fix ."
+alias fman='compgen -c | fzf | xargs tldr'
 
-alias d="docker"
-alias di="docker images"
+alias fzf_file_current="fd --max-depth 1 --type f . | sed 's|^\./||' | fzf --preview 'bat --style=numbers --color=always {}' | xargs -I {} sh -c 'test -n \"{}\" && nvim \"{}\"'"
+alias fzf_file_current_hidden="fd --max-depth 1 --type f --hidden . | sed 's|^\./||' | fzf --preview 'bat --style=numbers --color=always {}' | xargs -I {} sh -c 'test -n \"{}\" && nvim \"{}\"'"
+alias fzf_file_recursive="fd --type f . | sed 's|^\./||' | fzf --preview 'bat --style=numbers --color=always {}' | xargs -I {} sh -c 'test -n \"{}\" && nvim \"{}\"'"
+alias fzf_file_recursive_hidden="fd --type f --hidden . | sed 's|^\./||' | fzf --preview 'bat --style=numbers --color=always {}' | xargs -I {} sh -c 'test -n \"{}\" && nvim \"{}\"'"
 
-alias youtube-mp3="youtube-dl --extract-audio --audio-format mp3"		# usage : youtube-mp3 url
-alias make-mp3="ffmpeg -i"												# usage : make-mp3 original-file.mp4 new-name.mp3
+alias ff='fzf_file_current'
+alias ff.='fzf_file_current_hidden'
+alias ffr='fzf_file_recursive'
+alias ffr.='fzf_file_recursive_hidden'
+alias ff.r='ffr.'
+
+fzf_CD_home() {
+  local dir
+  dir=$(fd --type d . ~ | sed 's|^\./||' | fzf --header='Jump to location' --preview 'tree --gitignore -dC -L 3 {}' --preview-window=right:50%) && cd "$dir"
+}
+fzf_CD_home_hidden() {
+  local dir
+  dir=$(fd --hidden --type d . ~ | sed 's|^\./||' | fzf --header='Jump to location' --preview 'tree --gitignore -dC -L 3 {}' --preview-window=right:50%) && cd "$dir"
+}
+fzf_CD_current_recursive() {
+  local dir
+  dir=$(fd --type d . | sed 's|^\./||' | fzf --header='Jump to location' --preview 'tree --gitignore -dC -L 3 {}' --preview-window=right:50%) && cd "$dir"
+}
+fzf_CD_current_recursive_hidden() {
+  local dir
+  dir=$(fd --hidden --type d . | sed 's|^\./||' | fzf --header='Jump to location' --preview 'tree --gitignore -dC -L 3 {}' --preview-window=right:50%) && cd "$dir"
+}
+fzf_CD_current_relative() {
+  local dir
+  dir=$(fd --type d --max-depth 1 . | sed 's|^\./||' | fzf --header='Jump to location' --preview 'tree --gitignore -dC -L 3 {}' --preview-window=right:50%)
+  if [ -n "$dir" ]; then
+    cd "$dir" && if [ $(fd --type d --max-depth 1 --hidden --ignore-file .gitignore | wc -l) -gt 0 ]; then
+      fzf_CD_current_relative
+    fi
+  fi
+}
+fzf_CD_current_relative_hidden() {
+  local dir
+  dir=$(fd --hidden --type d --max-depth 1 . | sed 's|^\./||' | fzf --header='Jump to location' --preview 'tree --gitignore -dC -L 3 {}' --preview-window=right:50%)
+  if [ -n "$dir" ]; then
+    cd "$dir" && if [ $(fd --type d --max-depth 1 --hidden --ignore-file .gitignore | wc -l) -gt 0 ]; then
+      fzf_CD_current_relative_hidden
+    fi
+  fi
+}
+
+alias flh='fzf_CD_home'
+alias flh.='fzf_CD_home_hidden'
+alias fl.h='flh.'
+alias fl='fzf_CD_current_relative'
+alias fl.='fzf_CD_current_relative_hidden'
+alias flr='fzf_CD_current_recursive'
+alias flr.='fzf_CD_current_recursive_hidden'
+alias fl.r='flr.'
+
+export FZF_DEFAULT_OPTS="
+  --bind 'ctrl-x:clear-query'
+  --bind 'ctrl-j:jump'
+  --bind 'ctrl-t:last'
+  --bind 'ctrl-b:first'
+  --bind 'ctrl-u:half-page-up'
+  --bind 'ctrl-d:half-page-down'
+  --bind 'alt-p:preview-half-page-up'
+  --bind 'alt-n:preview-half-page-down'
+"
+
+alias f='echo "
+  
+  Hello, fzf!
+
+        ff         fzf_file_current
+        ff.        fzf_file_current_hidden
+        ffr        fzf_file_recursive
+        ffr.       
+        ff.r       fzf_file_recursive_hidden
+        
+        fl         fzf_CD_current_(relative)
+        fl.        fzf_CD_current_(relative)_hidden
+        flr        fzf_CD_current_recursive
+        flr.       
+        fl.r       fzf_CD_current_recursive_hidden
+        flh        fzf_CD_home
+        flh.       
+        fl.h       fzf_CD_home_hidden
+
+--bind  ctrl-x     clear-query
+--bind  ctrl-j     jump
+--bind  ctrl-t     last
+--bind  ctrl-b     first
+--bind  ctrl-u     half-page-up
+--bind  ctrl-d     half-page-down
+--bind  alt-p      preview-half-page-up
+--bind  alt-n      preview-half-page-down
+"'
+
+bind -x '"\C-l": clear'
+
+alias browser='google-chrome'
+google() {
+    browser "https://www.google.com/search?q=$1"
+}
+
+# export PATH="/opt/flutter/bin:$PATH"
+# export JAVA_HOME='/usr/lib/jvm/java-8-openjdk/jre'
+# export PATH=$JAVA_HOME/bin:$PATH 
+# export ANDROID_SDK_ROOT='/opt/android-sdk'
+# export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools/
+# export PATH=$PATH:$ANDROID_SDK_ROOT/tools/bin/
+# export PATH=$PATH:$ANDROID_ROOT/emulator
+# export PATH=$PATH:$ANDROID_SDK_ROOT/tools/
 
 xhost +local:root > /dev/null 2>&1
-
-complete -cf sudo
 
 # Bash won't get SIGWINCH if another process is in the foreground.
 # Enable checkwinsize so that bash will check the terminal size when
@@ -162,8 +272,10 @@ shopt -s expand_aliases
 # Enable history appending instead of overwriting.  #139609
 shopt -s histappend
 # show history datetime
-HISTTIMEFORMAT="%F %T "
+HISTTIMEFORMAT='%F %T '
 HISTCONTROL=ignoredups
+#export EDITOR=/usr/bin/nvim
+export SUDO_EDITOR=/usr/bin/nvim
 
 #
 # # ex - archive extractor
@@ -190,19 +302,28 @@ ex ()
   fi
 }
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-#custom colorizing
-#PS1='\[\033[1;36m\]\u\[\033[1;31m\]@\[\033[1;32m\]\h:\[\033[1;35m\]\w\[\033[1;31m\]\$\[\033[0m\] '
-
-# webm >> gif 만들기
-function webm2gif() {
-    ffmpeg -y -i "$1" -vf palettegen _tmp_palette.png
-    ffmpeg -y -i "$1" -i _tmp_palette.png -filter_complex paletteuse -r 10 -loop 0  "${1%.webm}.gif"
-    rm -f _tmp_palette.png
+# Install packages using yay (change to pacman/AUR helper of your choice)
+yayinstall() {
+  yay -Slq | fzf -q "$1" -m --preview 'yay -Si {1}'| xargs -ro yay -S 
+}
+# Remove installed packages (change to pacman/AUR helper of your choice)
+yayremove() {
+  yay -Qq | fzf -q "$1" -m --preview 'yay -Qi {1}' | xargs -ro yay -Rns 
 }
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
+# Install packages using yay (change to pacman/AUR helper of your choice)
+pacinstall() {
+  pacman -Slq | fzf -q "$1" -m --preview 'pacman -Si {1}'| xargs -ro pacman -S 
+}
+# Remove installed packages (change to pacman/AUR helper of your choice)
+pacremove() {
+  pacman -Qq | fzf -q "$1" -m --preview 'pacman -Qi {1}' | xargs -ro pacman -Rns 
+}
+
+bind '"\C-p": previous-history'
+bind '"\C-n": next-history'
+
+alias doc='cd /home/sy/Me/mkdocs/docs && vi .'
+alias docup='git add . && git commit -m 'write' && git push && gh run watch'
+
+alias lzd='lazydocker'
